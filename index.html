@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>قهوة أبو حصان</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+
+  <!-- ── Custom Cursor ── -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- ── Particle Canvas ── -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- ══════════════════════════════════
+       LOGO AS FIXED FULL-VIEWPORT BACKGROUND
+       The actual logo.svg is placed as a fixed
+       <img> that covers 100vw × 100vh and stays
+       in place while the user scrolls.
+  ═══════════════════════════════════════ -->
+  <img
+    class="hero__bg"
+    src="assets/logo.svg"
+    alt="شعار قهوة أبو حصان"
+    aria-hidden="true"
+  />
+  <!-- Dark gradient overlay (also fixed) -->
+  <div class="hero__overlay" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════
+       NAVIGATION
+  ═══════════════════════════════════════ -->
+  <nav class="nav" role="navigation" aria-label="القائمة الرئيسية">
+    <div class="nav__logo-wrap">
+      <img
+        class="nav__logo-img"
+        src="assets/logo.svg"
+        alt="شعار قهوة أبو حصان"
+      />
+      <span class="nav__brand">قهوة أبو حصان</span>
+    </div>
+
+    <ul class="nav__links" role="list">
+      <li><a class="nav__link active" href="index.html">الرئيسية</a></li>
+      <li><a class="nav__link" href="#about">من نحن</a></li>
+      <li><a class="nav__link" href="#menu">قائمتنا</a></li>
+      <li><a class="nav__link nav__cta" href="market.html">اطلب الآن</a></li>
+    </ul>
+
+    <button class="nav__toggle" aria-label="فتح القائمة" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ══════════════════════════════════
+       HERO SECTION
+  ═══════════════════════════════════════ -->
+  <section class="hero" aria-label="الصفحة الرئيسية">
+    <div class="hero__content">
+      <span class="hero__badge">منذ عام ١٤٢٠ هـ</span>
+
+      <h1 class="hero__title">
+        قهوة<br />
+        <span>أبو حصان</span>
+      </h1>
+
+      <p class="hero__subtitle">أصالة الطعم — فن التحضير</p>
+
+      <p class="hero__desc">
+        نقدّم لكم أجود أنواع القهوة العربية الأصيلة،
+        محضّرة بأيدي محترفين ومع أطيب المكوّنات،
+        لتجربة لا تُنسى في كل قطرة.
+      </p>
+
+      <div class="hero__actions">
+        <a class="btn btn-primary" href="market.html">اطلب توصيل 🛵</a>
+        <a class="btn btn-outline" href="#menu">تصفّح القائمة</a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="hero__scroll" aria-hidden="true">
+      <span>اكتشف أكثر</span>
+      <div class="hero__scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       FEATURES / WHY US
+  ═══════════════════════════════════════ -->
+  <section id="about" class="section section--dark">
+    <div class="container">
+      <header class="section__header reveal">
+        <span class="section__tag">لماذا نحن؟</span>
+        <h2 class="section__title">تجربة <span>مميّزة</span> في كل زيارة</h2>
+        <div class="section__line"></div>
+      </header>
+
+      <div class="features-grid">
+        <article class="feature-card reveal" style="transition-delay:.05s">
+          <span class="feature-card__icon">☕</span>
+          <h3 class="feature-card__title">قهوة عربية أصيلة</h3>
+          <p class="feature-card__text">
+            حبوب مختارة من أفضل المزارع، مُحمَّصة يومياً لضمان أعلى درجات الطزاجة والجودة.
+          </p>
+        </article>
+
+        <article class="feature-card reveal" style="transition-delay:.12s">
+          <span class="feature-card__icon">🌿</span>
+          <h3 class="feature-card__title">مكوّنات طبيعية</h3>
+          <p class="feature-card__text">
+            هيل، زعفران، وتوابل فاخرة مستوردة بعناية لتمنح كوبك عمقاً استثنائياً من النكهة.
+          </p>
+        </article>
+
+        <article class="feature-card reveal" style="transition-delay:.19s">
+          <span class="feature-card__icon">🚀</span>
+          <h3 class="feature-card__title">توصيل سريع</h3>
+          <p class="feature-card__text">
+            نوصّل طلبك طازجاً إلى باب منزلك في أسرع وقت، مع ضمان الحفاظ على الجودة.
+          </p>
+        </article>
+
+        <article class="feature-card reveal" style="transition-delay:.26s">
+          <span class="feature-card__icon">🏆</span>
+          <h3 class="feature-card__title">خبرة تتجاوز ٢٥ عاماً</h3>
+          <p class="feature-card__text">
+            موروث أسري عريق في فن صناعة القهوة، يجمع بين التراث الأصيل والأسلوب العصري.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       QUOTE
+  ═══════════════════════════════════════ -->
+  <div class="quote-section section--darker reveal">
+    <span class="quote-mark">"</span>
+    <p class="quote-text shimmer">
+      القهوة ليست مجرد مشروب،<br />إنها لحظة من الاطمئنان والدفء
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════
+       MENU HIGHLIGHTS
+  ═══════════════════════════════════════ -->
+  <section id="menu" class="section section--dark">
+    <div class="container">
+      <header class="section__header reveal">
+        <span class="section__tag">قائمتنا</span>
+        <h2 class="section__title">اكتشف <span>نكهاتنا</span></h2>
+        <div class="section__line"></div>
+      </header>
+
+      <div class="menu-grid">
+
+        <div class="menu-item reveal" style="transition-delay:.04s">
+          <div class="menu-item__placeholder">☕</div>
+          <div class="menu-item__body">
+            <div class="menu-item__name">قهوة عربية</div>
+            <div class="menu-item__price">١٢ ريال</div>
+          </div>
+        </div>
+
+        <div class="menu-item reveal" style="transition-delay:.09s">
+          <div class="menu-item__placeholder">🫖</div>
+          <div class="menu-item__body">
+            <div class="menu-item__name">شاي مغربي</div>
+            <div class="menu-item__price">١٠ ريال</div>
+          </div>
+        </div>
+
+        <div class="menu-item reveal" style="transition-delay:.14s">
+          <div class="menu-item__placeholder">🥛</div>
+          <div class="menu-item__body">
+            <div class="menu-item__name">كافيه لاتيه</div>
+            <div class="menu-item__price">١٨ ريال</div>
+          </div>
+        </div>
+
+        <div class="menu-item reveal" style="transition-delay:.19s">
+          <div class="menu-item__placeholder">🧋</div>
+          <div class="menu-item__body">
+            <div class="menu-item__name">تشاي هندي</div>
+            <div class="menu-item__price">١٥ ريال</div>
+          </div>
+        </div>
+
+        <div class="menu-item reveal" style="transition-delay:.24s">
+          <div class="menu-item__placeholder">🍵</div>
+          <div class="menu-item__body">
+            <div class="menu-item__name">قهوة تركية</div>
+            <div class="menu-item__price">١٤ ريال</div>
+          </div>
+        </div>
+
+        <div class="menu-item reveal" style="transition-delay:.29s">
+          <div class="menu-item__placeholder">🧊</div>
+          <div class="menu-item__body">
+            <div class="menu-item__name">قهوة باردة</div>
+            <div class="menu-item__price">١٦ ريال</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center; margin-top:2.5rem;" class="reveal">
+        <a class="btn btn-primary" href="market.html">عرض القائمة الكاملة والأسعار</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__logo">قهوة أبو حصان</div>
+    <nav>
+      <ul class="footer__links" role="list">
+        <li><a class="footer__link" href="index.html">الرئيسية</a></li>
+        <li><a class="footer__link" href="#about">من نحن</a></li>
+        <li><a class="footer__link" href="#menu">القائمة</a></li>
+        <li><a class="footer__link" href="market.html">المتجر</a></li>
+      </ul>
+    </nav>
+    <div class="footer__divider"></div>
+    <p class="footer__copy">
+      &copy; ١٤٤٦ هـ — قهوة أبو حصان. جميع الحقوق محفوظة.
+    </p>
+  </footer>
+
+  <!-- Script -->
+  <script src="assets/script.js"></script>
+</body>
+</html>
