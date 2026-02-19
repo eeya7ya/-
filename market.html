@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>متجر قهوة أبو حصان — توصيل وأسعار</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+
+  <!-- ── Custom Cursor ── -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- ── Particle Canvas ── -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!--
+    The logo.svg is the fixed full-viewport background on every page,
+    providing brand consistency while the content scrolls above it.
+  -->
+  <img
+    class="hero__bg"
+    src="assets/logo.svg"
+    alt="شعار قهوة أبو حصان"
+    aria-hidden="true"
+  />
+  <div class="hero__overlay" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════
+       NAVIGATION
+  ═══════════════════════════════════════ -->
+  <nav class="nav" role="navigation" aria-label="القائمة الرئيسية">
+    <div class="nav__logo-wrap">
+      <img
+        class="nav__logo-img"
+        src="assets/logo.svg"
+        alt="شعار قهوة أبو حصان"
+      />
+      <span class="nav__brand">قهوة أبو حصان</span>
+    </div>
+
+    <ul class="nav__links" role="list">
+      <li><a class="nav__link" href="index.html">الرئيسية</a></li>
+      <li><a class="nav__link" href="index.html#about">من نحن</a></li>
+      <li><a class="nav__link" href="index.html#menu">القائمة</a></li>
+      <li><a class="nav__link active nav__cta" href="market.html">اطلب الآن</a></li>
+    </ul>
+
+    <button class="nav__toggle" aria-label="فتح القائمة" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ══════════════════════════════════
+       PAGE HERO
+  ═══════════════════════════════════════ -->
+  <header class="page-hero">
+    <span class="section__tag">التوصيل والأسعار</span>
+    <h1 class="page-hero__title">
+      متجر <span>قهوة أبو حصان</span>
+    </h1>
+    <p class="page-hero__sub">
+      اطلب مشروبك المفضّل مع التوصيل السريع — نصلك في أقل من ٣٠ دقيقة
+    </p>
+    <a class="btn btn-outline" href="#price-list">قائمة الأسعار الكاملة ↓</a>
+  </header>
+
+  <!-- ══════════════════════════════════
+       SEARCH + FILTER BAR
+  ═══════════════════════════════════════ -->
+  <div class="market-controls" role="search">
+    <div class="search-box">
+      <span class="search-box__icon">🔍</span>
+      <input
+        class="search-box__input"
+        type="search"
+        placeholder="ابحث عن مشروب..."
+        aria-label="بحث عن منتج"
+      />
+    </div>
+
+    <div class="filter-tabs" role="group" aria-label="تصنيف المنتجات">
+      <button class="filter-tab active" data-cat="all">الكل</button>
+      <button class="filter-tab" data-cat="arabic">قهوة عربية</button>
+      <button class="filter-tab" data-cat="espresso">إسبريسو</button>
+      <button class="filter-tab" data-cat="cold">مشروبات باردة</button>
+      <button class="filter-tab" data-cat="tea">شاي وأعشاب</button>
+      <button class="filter-tab" data-cat="extras">إضافات</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PRODUCTS GRID
+  ═══════════════════════════════════════ -->
+  <main class="products-section" id="products">
+    <div class="container">
+      <div class="products-grid" id="products-grid">
+
+        <!-- ═══ قهوة عربية ═══ -->
+
+        <article class="product-card reveal" data-cat="arabic">
+          <span class="product-card__badge">الأكثر طلباً</span>
+          <div class="product-card__img-wrap">
+            <!--
+              صورة المنتج ستُضاف لاحقاً.
+              استبدل هذا القسم بـ: <img src="assets/images/arabic-coffee.jpg" alt="قهوة عربية" />
+            -->
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">☕</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">قهوة عربية</span>
+            <h2 class="product-card__name">قهوة عربية أصيلة</h2>
+            <p class="product-card__desc">
+              قهوة عربية محضّرة بالهيل والزعفران، وصفة الجدة العريقة
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="12">
+                <small>ريال</small>١٢
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة" title="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card reveal" data-cat="arabic" style="transition-delay:.06s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🫖</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">قهوة عربية</span>
+            <h2 class="product-card__name">قهوة بالزعفران</h2>
+            <p class="product-card__desc">
+              إضافة مميزة من الزعفران الأصيل تمنح كوبك نكهة ملكية فاخرة
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="16">
+                <small>ريال</small>١٦
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card reveal" data-cat="arabic" style="transition-delay:.1s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🌰</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">قهوة عربية</span>
+            <h2 class="product-card__name">قهوة دارك روست</h2>
+            <p class="product-card__desc">
+              تحميص داكن خاص يمنحك قهوة ذات طعم قوي وعمق استثنائي
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="14">
+                <small>ريال</small>١٤
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- ═══ إسبريسو ═══ -->
+
+        <article class="product-card reveal" data-cat="espresso" style="transition-delay:.06s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🍵</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">إسبريسو</span>
+            <h2 class="product-card__name">إسبريسو مضاعف</h2>
+            <p class="product-card__desc">
+              جرعة مزدوجة من الإسبريسو الغني، لمن يبحث عن قوة وتركيز
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="15">
+                <small>ريال</small>١٥
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card reveal" data-cat="espresso" style="transition-delay:.1s">
+          <span class="product-card__badge">جديد</span>
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🥛</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">إسبريسو</span>
+            <h2 class="product-card__name">كافيه لاتيه</h2>
+            <p class="product-card__desc">
+              إسبريسو ناعم مع حليب مبخّر كريمي، الطعم المثالي في كل وقت
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="18">
+                <small>ريال</small>١٨
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card reveal" data-cat="espresso" style="transition-delay:.14s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">☁️</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">إسبريسو</span>
+            <h2 class="product-card__name">كابتشينو</h2>
+            <p class="product-card__desc">
+              ثلاثة أثلاث من التوازن المثالي: إسبريسو، حليب، ورغوة ناعمة
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="18">
+                <small>ريال</small>١٨
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card reveal" data-cat="espresso" style="transition-delay:.18s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🍫</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">إسبريسو</span>
+            <h2 class="product-card__name">موكا</h2>
+            <p class="product-card__desc">
+              إسبريسو بالشوكولا الداكنة، لعشاق الجمع بين المرارة والحلاوة
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="20">
+                <small>ريال</small>٢٠
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- ═══ مشروبات باردة ═══ -->
+
+        <article class="product-card reveal" data-cat="cold" style="transition-delay:.06s">
+          <span class="product-card__badge">صيفي</span>
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🧊</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">مشروبات باردة</span>
+            <h2 class="product-card__name">قهوة باردة مثلّجة</h2>
+            <p class="product-card__desc">
+              قهوة سبيشالتي باردة فوق الثلج، منعشة ومنبّهة في آنٍ واحد
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="20">
+                <small>ريال</small>٢٠
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card reveal" data-cat="cold" style="transition-delay:.1s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🧋</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">مشروبات باردة</span>
+            <h2 class="product-card__name">فرابيه كراميل</h2>
+            <p class="product-card__desc">
+              مزيج مبرّد من القهوة والكراميل والكريمة، متعة في كل رشفة
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="22">
+                <small>ريال</small>٢٢
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card reveal" data-cat="cold" style="transition-delay:.14s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">💚</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">مشروبات باردة</span>
+            <h2 class="product-card__name">ماتشا لاتيه بارد</h2>
+            <p class="product-card__desc">
+              ماتشا يابانية أصيلة مع الحليب البارد، توازن رائع بين الطاقة والنقاء
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="22">
+                <small>ريال</small>٢٢
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- ═══ شاي وأعشاب ═══ -->
+
+        <article class="product-card reveal" data-cat="tea" style="transition-delay:.06s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🍃</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">شاي وأعشاب</span>
+            <h2 class="product-card__name">شاي مغربي بالنعنع</h2>
+            <p class="product-card__desc">
+              شاي أخضر مغربي أصيل مع النعنع الطازج والسكر الصخري
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="10">
+                <small>ريال</small>١٠
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card reveal" data-cat="tea" style="transition-delay:.1s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🫚</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">شاي وأعشاب</span>
+            <h2 class="product-card__name">تشاي هندي</h2>
+            <p class="product-card__desc">
+              توليفة هندية دافئة من الهيل والقرفة وحليب الشاي الكريمي
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="15">
+                <small>ريال</small>١٥
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card reveal" data-cat="tea" style="transition-delay:.14s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🌸</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">شاي وأعشاب</span>
+            <h2 class="product-card__name">كركديه بارد</h2>
+            <p class="product-card__desc">
+              كركديه منقوع بالماء البارد مع الليمون، منعّش وصحي
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="12">
+                <small>ريال</small>١٢
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- ═══ إضافات ═══ -->
+
+        <article class="product-card reveal" data-cat="extras" style="transition-delay:.06s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🍮</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">إضافات</span>
+            <h2 class="product-card__name">صوص الكراميل</h2>
+            <p class="product-card__desc">
+              إضافة كراميل لأي مشروب لمسة حلاوة إضافية
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="3">
+                <small>ريال</small>٣
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card reveal" data-cat="extras" style="transition-delay:.1s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🫙</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">إضافات</span>
+            <h2 class="product-card__name">مقياس إضافي من القهوة</h2>
+            <p class="product-card__desc">
+              زيادة تركيز القهوة لمن يحب المذاق القوي الكامل
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="4">
+                <small>ريال</small>٤
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card reveal" data-cat="extras" style="transition-delay:.14s">
+          <div class="product-card__img-wrap">
+            <div class="product-card__placeholder">
+              <span class="product-card__placeholder-icon">🥛</span>
+              <span class="product-card__placeholder-text">صورة قادمة</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">إضافات</span>
+            <h2 class="product-card__name">حليب نباتي (لوز / شوفان)</h2>
+            <p class="product-card__desc">
+              بديل الحليب النباتي لأي مشروب — لوز أو شوفان حسب الطلب
+            </p>
+            <div class="product-card__footer">
+              <div class="product-card__price" data-price="5">
+                <small>ريال</small>٥
+              </div>
+              <button class="add-btn" aria-label="أضف إلى السلة">＋</button>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- /products-grid -->
+    </div><!-- /container -->
+  </main>
+
+  <!-- ══════════════════════════════════
+       PRICE LIST
+  ═══════════════════════════════════════ -->
+  <section id="price-list" class="price-list" aria-labelledby="price-list-title">
+    <div class="container">
+      <header class="section__header reveal">
+        <span class="section__tag">الأسعار</span>
+        <h2 class="section__title" id="price-list-title">قائمة الأسعار <span>الكاملة</span></h2>
+        <div class="section__line"></div>
+      </header>
+
+      <!-- القهوة العربية -->
+      <h3 class="reveal" style="font-family:var(--ff-display);color:var(--clr-gold);margin-bottom:1rem;font-size:1.3rem;">
+        ☕ القهوة العربية
+      </h3>
+      <div class="price-table reveal" style="margin-bottom:2.5rem">
+        <div class="price-row">
+          <span class="price-row__name">☕ قهوة عربية أصيلة</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٢ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🌸 قهوة بالزعفران</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٦ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🌰 قهوة دارك روست</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٤ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🫖 قهوة تركية</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٤ ريال</span>
+        </div>
+      </div>
+
+      <!-- الإسبريسو -->
+      <h3 class="reveal" style="font-family:var(--ff-display);color:var(--clr-gold);margin-bottom:1rem;font-size:1.3rem;">
+        🍵 الإسبريسو والمشروبات الساخنة
+      </h3>
+      <div class="price-table reveal" style="margin-bottom:2.5rem">
+        <div class="price-row">
+          <span class="price-row__name">🍵 إسبريسو مفرد</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٢ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🍵 إسبريسو مضاعف</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٥ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🥛 كافيه لاتيه</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٨ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">☁️ كابتشينو</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٨ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🍫 موكا</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">٢٠ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🌰 أمريكانو</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٢ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">💛 فلات وايت</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">٢٠ ريال</span>
+        </div>
+      </div>
+
+      <!-- المشروبات الباردة -->
+      <h3 class="reveal" style="font-family:var(--ff-display);color:var(--clr-gold);margin-bottom:1rem;font-size:1.3rem;">
+        🧊 المشروبات الباردة
+      </h3>
+      <div class="price-table reveal" style="margin-bottom:2.5rem">
+        <div class="price-row">
+          <span class="price-row__name">🧊 قهوة باردة مثلّجة</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">٢٠ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🧋 فرابيه كراميل</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">٢٢ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">💚 ماتشا لاتيه بارد</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">٢٢ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🍦 فانيلا فرابيه</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">٢٢ ريال</span>
+        </div>
+      </div>
+
+      <!-- الشاي والأعشاب -->
+      <h3 class="reveal" style="font-family:var(--ff-display);color:var(--clr-gold);margin-bottom:1rem;font-size:1.3rem;">
+        🍃 الشاي والأعشاب
+      </h3>
+      <div class="price-table reveal" style="margin-bottom:2.5rem">
+        <div class="price-row">
+          <span class="price-row__name">🍃 شاي مغربي بالنعنع</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٠ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🫚 تشاي هندي</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٥ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🌸 كركديه بارد</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٢ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🌿 شاي أخضر ياباني</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٢ ريال</span>
+        </div>
+      </div>
+
+      <!-- الإضافات -->
+      <h3 class="reveal" style="font-family:var(--ff-display);color:var(--clr-gold);margin-bottom:1rem;font-size:1.3rem;">
+        ➕ الإضافات
+      </h3>
+      <div class="price-table reveal">
+        <div class="price-row">
+          <span class="price-row__name">🍮 صوص كراميل</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">٣ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🫙 مقياس إسبريسو إضافي</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">٤ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🥛 حليب لوز / شوفان</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">٥ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🍦 كريمة مخفوقة</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">٣ ريال</span>
+        </div>
+        <div class="price-row">
+          <span class="price-row__name">🚚 رسوم التوصيل</span>
+          <span class="price-row__dots"></span>
+          <span class="price-row__price">١٠ ريال</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__logo">قهوة أبو حصان</div>
+    <nav>
+      <ul class="footer__links" role="list">
+        <li><a class="footer__link" href="index.html">الرئيسية</a></li>
+        <li><a class="footer__link" href="index.html#about">من نحن</a></li>
+        <li><a class="footer__link" href="index.html#menu">القائمة</a></li>
+        <li><a class="footer__link" href="market.html">المتجر</a></li>
+      </ul>
+    </nav>
+    <div class="footer__divider"></div>
+    <p class="footer__copy">
+      &copy; ١٤٤٦ هـ — قهوة أبو حصان. جميع الحقوق محفوظة.
+    </p>
+  </footer>
+
+  <!-- ══════════════════════════════════
+       CART
+  ═══════════════════════════════════════ -->
+  <div class="cart-overlay" id="cart-overlay" aria-hidden="true"></div>
+
+  <aside class="cart-drawer" id="cart-drawer" role="dialog" aria-label="سلة المشتريات" aria-modal="true">
+    <div class="cart-drawer__header">
+      <h2 class="cart-drawer__title">🛒 سلة المشتريات</h2>
+      <button class="cart-drawer__close" id="cart-close" aria-label="إغلاق السلة">✕</button>
+    </div>
+    <div class="cart-drawer__items" id="cart-items">
+      <div class="cart-empty">
+        <span class="cart-empty__icon">☕</span>
+        <p>سلة المشتريات فارغة</p>
+      </div>
+    </div>
+    <div class="cart-drawer__footer">
+      <div class="cart-total">
+        <span class="cart-total__label">المجموع</span>
+        <span class="cart-total__value" id="cart-total-value">٠ ريال</span>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;"
+        onclick="showToast('سيتم ربط الطلب بنظام التوصيل قريباً ✓')">
+        تأكيد الطلب 🛵
+      </button>
+    </div>
+  </aside>
+
+  <!-- Floating Cart Button -->
+  <button class="cart-fab" id="cart-fab" aria-label="فتح سلة المشتريات">
+    🛒 السلة
+    <span class="cart-fab__count">٠</span>
+  </button>
+
+  <!-- Script -->
+  <script src="assets/script.js"></script>
+</body>
+</html>
