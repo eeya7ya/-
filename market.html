@@ -701,6 +701,45 @@
     <span class="cart-fab__count">٠</span>
   </button>
 
+  <!-- ══════════════════════════════════
+       AI CHATBOT
+  ═══════════════════════════════════════ -->
+
+  <!-- Floating Chat Button -->
+  <button class="chat-fab" id="chat-fab" aria-label="فتح المساعد الذكي">
+    <span class="chat-fab__icon">🤖</span>
+    <span class="chat-fab__label">مساعد ذكي</span>
+    <span class="chat-fab__badge" id="chat-badge" hidden>1</span>
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chat-window" id="chat-window" role="dialog" aria-label="المساعد الذكي" aria-modal="true" hidden>
+    <div class="chat-window__header">
+      <div class="chat-window__avatar">🤖</div>
+      <div class="chat-window__info">
+        <div class="chat-window__name">مساعد قهوة أبو حصان</div>
+        <div class="chat-window__status">متاح الآن</div>
+      </div>
+      <button class="chat-window__close" id="chat-close" aria-label="إغلاق">✕</button>
+    </div>
+
+    <div class="chat-messages" id="chat-messages"></div>
+
+    <div class="chat-quick-replies" id="chat-quick-replies"></div>
+
+    <div class="chat-input-row">
+      <input
+        class="chat-input"
+        id="chat-input"
+        type="text"
+        placeholder="اكتب رسالتك هنا..."
+        autocomplete="off"
+        aria-label="رسالتك"
+      />
+      <button class="chat-send-btn" id="chat-send" aria-label="إرسال">➤</button>
+    </div>
+  </div>
+
   <!-- Script -->
   <script src="assets/script.js"></script>
 </body>
