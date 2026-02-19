@@ -317,6 +317,280 @@ function showToast(msg) {
   toast._t = setTimeout(() => { toast.style.opacity = '0'; }, 2000);
 }
 
+/* ======================================
+   AI CHATBOT
+   ====================================== */
+(function initChatbot() {
+  const fab       = document.getElementById('chat-fab');
+  const win       = document.getElementById('chat-window');
+  const closeBtn  = document.getElementById('chat-close');
+  const msgList   = document.getElementById('chat-messages');
+  const input     = document.getElementById('chat-input');
+  const sendBtn   = document.getElementById('chat-send');
+  const qrWrap    = document.getElementById('chat-quick-replies');
+  const badge     = document.getElementById('chat-badge');
+
+  if (!fab || !win) return;
+
+  /* ── Product catalogue (same products as market page) ── */
+  const PRODUCTS = [
+    { emoji: '☕', name: 'قهوة عربية أصيلة',      price: 12, cat: ['arabic','تراثية','مر','خفيفة','ساخن'] },
+    { emoji: '🌼', name: 'قهوة بالزعفران',         price: 16, cat: ['arabic','زعفران','فاخرة','ساخن'] },
+    { emoji: '🫘', name: 'قهوة محمصة غامقة',       price: 14, cat: ['arabic','قوية','ساخن'] },
+    { emoji: '☕', name: 'إسبريسو مفرد',           price: 12, cat: ['espresso','قوية','ساخن'] },
+    { emoji: '☕', name: 'إسبريسو مزدوج',          price: 15, cat: ['espresso','قوية','ساخن'] },
+    { emoji: '🥛', name: 'كافيه لاتيه',            price: 18, cat: ['espresso','لبن','ناعمة','ساخن'] },
+    { emoji: '☕', name: 'كابتشينو',               price: 18, cat: ['espresso','لبن','ناعمة','ساخن'] },
+    { emoji: '🍫', name: 'موكا',                   price: 20, cat: ['espresso','شوكولاتة','حلو','ساخن'] },
+    { emoji: '💧', name: 'أمريكانو',               price: 14, cat: ['espresso','خفيفة','ساخن'] },
+    { emoji: '🥛', name: 'فلات وايت',              price: 18, cat: ['espresso','لبن','ناعمة','ساخن'] },
+    { emoji: '🧊', name: 'قهوة مثلجة',            price: 20, cat: ['cold','بارد','منعش'] },
+    { emoji: '🍮', name: 'فرابيه كراميل',          price: 22, cat: ['cold','بارد','حلو','كراميل'] },
+    { emoji: '🍵', name: 'ماتشا لاتيه',            price: 22, cat: ['cold','بارد','ماتشا','صحي'] },
+    { emoji: '🫖', name: 'شاي مغربي بالنعناع',     price: 12, cat: ['tea','شاي','ساخن','منعش'] },
+    { emoji: '🫚', name: 'تشاي هندي',             price: 15, cat: ['tea','شاي','ساخن','حار'] },
+    { emoji: '🌸', name: 'كركديه بارد',            price: 12, cat: ['tea','بارد','منعش','صحي'] },
+    { emoji: '🌿', name: 'شاي أخضر ياباني',        price: 12, cat: ['tea','شاي','صحي','بارد'] },
+  ];
+
+  /* ── Knowledge base: intent → response ── */
+  const INTENTS = [
+    {
+      keys: ['مرحبا','هلا','أهلا','السلام','صباح','مساء','هاي'],
+      reply: () => 'أهلاً وسهلاً! 😊 أنا مساعدك الذكي في قهوة أبو حصان. كيف يمكنني مساعدتك اليوم؟',
+      quick: ['أريد توصية', 'ما الأسعار؟', 'كيف أطلب؟'],
+    },
+    {
+      keys: ['شكر','شكراً','ممتاز','رائع','جيد','تمام'],
+      reply: () => 'العفو! يسعدنا خدمتك دائماً. هل تحتاج شيئاً آخر؟ ☕',
+      quick: ['أريد توصية', 'كيف أطلب؟'],
+    },
+    {
+      keys: ['توصي','ينصح','اقترح','توصية','اختار لي','اختر','انصحني','ماذا تقترح'],
+      reply: () => {
+        const picks = randomPicks(3);
+        return { text: 'بالتأكيد! إليك أفضل اختياراتي لك اليوم ✨', products: picks };
+      },
+      quick: ['ساخن', 'بارد', 'حلو', 'قوية', 'صحي'],
+    },
+    {
+      keys: ['ساخن','حار'],
+      reply: () => {
+        const picks = PRODUCTS.filter(p => p.cat.includes('ساخن')).slice(0,3);
+        return { text: 'إليك أفضل مشروباتنا الساخنة 🔥', products: picks };
+      },
+      quick: ['بارد', 'حلو', 'قوية'],
+    },
+    {
+      keys: ['بارد','مثلج','مثلجة'],
+      reply: () => {
+        const picks = PRODUCTS.filter(p => p.cat.includes('بارد')).slice(0,3);
+        return { text: 'إليك أبرد وأطيب مشروباتنا ❄️', products: picks };
+      },
+      quick: ['ساخن', 'حلو', 'منعش'],
+    },
+    {
+      keys: ['حلو','محلى','كراميل','شوكولاتة','موكا'],
+      reply: () => {
+        const picks = PRODUCTS.filter(p => p.cat.includes('حلو') || p.cat.includes('كراميل') || p.cat.includes('شوكولاتة'));
+        return { text: 'أحب الحلو؟ هذه أفضل خياراتنا 🍮', products: picks };
+      },
+      quick: ['بارد', 'ساخن'],
+    },
+    {
+      keys: ['قوي','قوية','تركيز','كافيين','منبه','إسبريسو'],
+      reply: () => {
+        const picks = PRODUCTS.filter(p => p.cat.includes('قوية'));
+        return { text: 'تحب القهوة القوية؟ هذه خياراتك المثالية 💪', products: picks };
+      },
+      quick: ['خفيفة', 'بارد'],
+    },
+    {
+      keys: ['خفيف','خفيفة','ناعم','ناعمة','لبن','لاتيه','كابتشينو'],
+      reply: () => {
+        const picks = PRODUCTS.filter(p => p.cat.includes('ناعمة') || p.cat.includes('خفيفة') || p.cat.includes('لبن'));
+        return { text: 'إليك أطيب المشروبات الناعمة والخفيفة 🥛', products: picks };
+      },
+      quick: ['قوية', 'حلو'],
+    },
+    {
+      keys: ['صحي','صحية','عضوي','أعشاب','شاي','ماتشا'],
+      reply: () => {
+        const picks = PRODUCTS.filter(p => p.cat.includes('صحي') || p.cat.includes('شاي'));
+        return { text: 'خيارات صحية ورائعة لك 🌿', products: picks };
+      },
+      quick: ['ساخن', 'بارد'],
+    },
+    {
+      keys: ['عربي','تراث','أصيل','هيل','زعفران'],
+      reply: () => {
+        const picks = PRODUCTS.filter(p => p.cat.includes('arabic') || p.cat.includes('تراثية') || p.cat.includes('زعفران'));
+        return { text: 'قهوتنا العربية الأصيلة — فخرنا وتراثنا ☕', products: picks };
+      },
+      quick: ['قوية', 'زعفران'],
+    },
+    {
+      keys: ['سعر','أسعار','كم','تكلف','بكم','ريال'],
+      reply: () => 'أسعارنا تبدأ من ١٠ ريال فقط! 💰\n\nالقهوة العربية: ١٢–١٦ ر\nالإسبريسو: ١٢–٢٠ ر\nمشروبات باردة: ٢٠–٢٢ ر\nشاي وأعشاب: ١٠–١٥ ر\nرسوم التوصيل: ١٠ ر',
+      quick: ['أريد توصية', 'كيف أطلب؟'],
+    },
+    {
+      keys: ['اطلب','طلب','توصيل','توصل','أطلب','كيف','خطوات'],
+      reply: () => 'الطلب بسيط جداً! 🛵\n\n١. تصفّح المنتجات\n٢. اضغط "أضف للسلة"\n٣. افتح السلة وتأكد طلبك\n٤. سنوصّلك خلال أقل من ٣٠ دقيقة!',
+      quick: ['أريد توصية', 'ما الأسعار؟'],
+    },
+    {
+      keys: ['ساعة','وقت','دوام','متاح','يفتح','يغلق'],
+      reply: () => 'نحن متاحون يومياً من الساعة ٦ صباحاً حتى ١٢ منتصف الليل ⏰\nخدمة التوصيل متاحة طوال أوقات العمل.',
+      quick: ['كيف أطلب؟', 'ما الأسعار؟'],
+    },
+    {
+      keys: ['مكون','مكونات','يحتوي','الحليب','حليب','سكر','كافيين'],
+      reply: () => 'مشروباتنا مصنوعة من مكونات طبيعية 100% 🌿\nهيل، زعفران، وتوابل فاخرة مستوردة.\nيمكنك طلب حليب نباتي (لوز أو شوفان) كإضافة بـ ٥ ريال.',
+      quick: ['أريد توصية', 'ما الأسعار؟'],
+    },
+    {
+      keys: ['إضافة','إضافات','extras','كريمة','صوص'],
+      reply: () => {
+        const picks = PRODUCTS.filter(p => p.cat.includes('extras') || p.name.includes('صوص') || p.name.includes('كريمة') || p.name.includes('إسبريسو إضافي') || p.name.includes('حليب'));
+        return { text: 'يمكنك تحسين مشروبك بهذه الإضافات 🍮', products: picks };
+      },
+      quick: ['أريد توصية', 'ما الأسعار؟'],
+    },
+  ];
+
+  /* ── Helpers ── */
+  function randomPicks(n) {
+    const shuffled = [...PRODUCTS].sort(() => Math.random() - .5);
+    return shuffled.slice(0, n);
+  }
+
+  function matchIntent(text) {
+    const lower = text.toLowerCase();
+    return INTENTS.find(intent =>
+      intent.keys.some(k => lower.includes(k))
+    );
+  }
+
+  function defaultReply() {
+    return {
+      text: 'عذراً، لم أفهم سؤالك جيداً 😅 يمكنك تجربة أحد الأزرار أدناه أو اسألني عن:\n• توصية مشروب\n• الأسعار\n• طريقة الطلب',
+      quick: ['أريد توصية', 'ما الأسعار؟', 'كيف أطلب؟'],
+    };
+  }
+
+  /* ── Render helpers ── */
+  function addMessage(text, role) {
+    const el = document.createElement('div');
+    el.className = `chat-msg chat-msg--${role}`;
+    el.textContent = text;
+    msgList.appendChild(el);
+    msgList.scrollTop = msgList.scrollHeight;
+    return el;
+  }
+
+  function addProductCard(product) {
+    const el = document.createElement('div');
+    el.className = 'chat-msg chat-msg--bot';
+    el.innerHTML = `
+      <div class="chat-product-card">
+        <span class="chat-product-card__emoji">${product.emoji}</span>
+        <span class="chat-product-card__name">${product.name}</span>
+        <span class="chat-product-card__price">${product.price} ريال</span>
+      </div>`;
+    msgList.appendChild(el);
+    msgList.scrollTop = msgList.scrollHeight;
+  }
+
+  function showTyping() {
+    const el = document.createElement('div');
+    el.className = 'chat-msg chat-msg--bot chat-msg--typing';
+    el.innerHTML = '<span></span><span></span><span></span>';
+    el.id = 'chat-typing';
+    msgList.appendChild(el);
+    msgList.scrollTop = msgList.scrollHeight;
+    return el;
+  }
+
+  function setQuickReplies(replies) {
+    qrWrap.innerHTML = '';
+    (replies || []).forEach(text => {
+      const btn = document.createElement('button');
+      btn.className = 'chat-quick-reply';
+      btn.textContent = text;
+      btn.addEventListener('click', () => handleUserMessage(text));
+      qrWrap.appendChild(btn);
+    });
+  }
+
+  /* ── Core message handler ── */
+  function handleUserMessage(text) {
+    if (!text.trim()) return;
+    addMessage(text, 'user');
+    setQuickReplies([]);
+
+    const typing = showTyping();
+
+    setTimeout(() => {
+      typing.remove();
+
+      const intent = matchIntent(text);
+      const result = intent ? intent.reply() : defaultReply();
+      const quickReplies = intent ? (intent.quick || []) : defaultReply().quick;
+
+      if (typeof result === 'string') {
+        addMessage(result, 'bot');
+      } else {
+        addMessage(result.text, 'bot');
+        (result.products || []).forEach(p => addProductCard(p));
+      }
+
+      setQuickReplies(quickReplies);
+    }, 700 + Math.random() * 400);
+  }
+
+  /* ── Open / Close ── */
+  let opened = false;
+
+  function openChat() {
+    win.hidden = false;
+    badge.hidden = true;
+    if (!opened) {
+      opened = true;
+      setTimeout(() => {
+        addMessage('أهلاً بك في قهوة أبو حصان! ☕ أنا مساعدك الذكي، يسعدني مساعدتك في اختيار المشروب المناسب أو الإجابة على أي استفسار.', 'bot');
+        setQuickReplies(['أريد توصية', 'ما الأسعار؟', 'مشروب بارد', 'مشروب ساخن', 'كيف أطلب؟']);
+      }, 200);
+    }
+    input.focus();
+  }
+
+  function closeChat() {
+    win.hidden = true;
+  }
+
+  fab.addEventListener('click', openChat);
+  closeBtn.addEventListener('click', closeChat);
+
+  /* ── Send on button click or Enter ── */
+  sendBtn.addEventListener('click', () => {
+    handleUserMessage(input.value.trim());
+    input.value = '';
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      handleUserMessage(input.value.trim());
+      input.value = '';
+    }
+  });
+
+  /* ── Show badge after 3s to grab attention ── */
+  setTimeout(() => {
+    if (!opened) badge.hidden = false;
+  }, 3000);
+})();
+
 /* ── Active nav link ── */
 (function setActiveLink() {
   const path = window.location.pathname;
