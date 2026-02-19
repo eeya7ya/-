@@ -1310,6 +1310,101 @@ body.cursor-hover #cursor-ring {
   animation: shimmer 4s linear infinite;
 }
 
+/* ── AI Product Recommender Panel ── */
+.cart-recommendations {
+  padding: 0 1.25rem .75rem;
+  border-top: 1px solid rgba(201, 146, 42, .15);
+}
+.cart-recommendations:empty { display: none; }
+
+.cart-rec__header {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .8rem 0 .55rem;
+  font-family: var(--ff-display);
+  font-size: .82rem;
+  color: var(--clr-gold);
+  letter-spacing: .04em;
+}
+.cart-rec__ai-badge {
+  margin-right: auto;
+  font-size: .6rem;
+  font-family: var(--ff-body);
+  background: linear-gradient(135deg, rgba(201,146,42,.25), rgba(232,184,75,.15));
+  border: 1px solid rgba(201, 146, 42, .35);
+  color: var(--clr-gold-light);
+  padding: .18rem .55rem;
+  border-radius: 99px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.cart-rec__list {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+}
+
+.cart-rec__item {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  background: rgba(201, 146, 42, .05);
+  border: 1px solid rgba(201, 146, 42, .12);
+  border-radius: var(--radius-md);
+  padding: .5rem .7rem;
+  transition: background .25s, border-color .25s, transform .2s;
+}
+.cart-rec__item:hover {
+  background: rgba(201, 146, 42, .11);
+  border-color: rgba(201, 146, 42, .3);
+  transform: translateY(-1px);
+}
+
+.cart-rec__emoji {
+  font-size: 1.35rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.cart-rec__info {
+  flex: 1;
+  min-width: 0;
+}
+.cart-rec__name {
+  font-size: .8rem;
+  color: var(--clr-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+.cart-rec__price {
+  font-size: .72rem;
+  color: var(--clr-gold);
+  margin-top: .1rem;
+}
+.cart-rec__add {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 146, 42, .4);
+  background: transparent;
+  color: var(--clr-gold);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, transform .15s, border-color .2s;
+}
+.cart-rec__add:hover {
+  background: rgba(201, 146, 42, .2);
+  border-color: var(--clr-gold);
+  transform: scale(1.12);
+}
+
 /* ── Particle canvas ── */
 #particle-canvas {
   position: fixed;

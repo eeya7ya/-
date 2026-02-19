@@ -242,6 +242,7 @@
         </div>`;
       if (totalEl) totalEl.textContent = '0 ريال';
       if (countEl) countEl.textContent = '0';
+      renderRecommendations([]);
       return;
     }
 
@@ -269,6 +270,8 @@
 
     if (totalEl) totalEl.textContent = total + ' ريال';
     if (countEl) countEl.textContent = cart.length;
+
+    renderRecommendations(cart);
   }
 
   /* Add to cart buttons */
@@ -281,8 +284,9 @@
     const name  = card.querySelector('.product-card__name')?.textContent || '';
     const price = parseInt(card.querySelector('.product-card__price')?.dataset.price || '0', 10);
     const emoji = card.querySelector('.product-card__placeholder-icon')?.textContent || '☕';
+    const cat   = card.dataset.cat || '';
 
-    cart.push({ name, price, emoji });
+    cart.push({ name, price, emoji, cat });
     renderCart();
 
     /* Pulse animation on FAB */
@@ -290,6 +294,15 @@
     setTimeout(() => fab.classList.remove('pulse'), 400);
 
     /* Mini toast */
+    showToast('تمت الإضافة إلى السلة ✓');
+  });
+
+  /* Add recommended items to cart */
+  document.addEventListener('rec:add', e => {
+    cart.push(e.detail);
+    renderCart();
+    fab.classList.add('pulse');
+    setTimeout(() => fab.classList.remove('pulse'), 400);
     showToast('تمت الإضافة إلى السلة ✓');
   });
 
@@ -315,6 +328,138 @@ function showToast(msg) {
   toast.style.opacity = '1';
   clearTimeout(toast._t);
   toast._t = setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+}
+
+/* ── AI Product Recommender ── */
+(function initRecommender() {
+  /* Full product catalog with semantic tags for scoring */
+  const CATALOG = [
+    { name: 'قهوة عربية أصيلة',         price: 12, emoji: '☕', cat: 'arabic',  tags: ['hot','traditional','spiced','light'] },
+    { name: 'قهوة بالزعفران',            price: 16, emoji: '🫖', cat: 'arabic',  tags: ['hot','traditional','spiced','premium','floral'] },
+    { name: 'قهوة دارك روست',            price: 14, emoji: '🌰', cat: 'arabic',  tags: ['hot','strong','bold'] },
+    { name: 'إسبريسو مضاعف',             price: 15, emoji: '🍵', cat: 'espresso',tags: ['hot','strong','bold','concentrate'] },
+    { name: 'كافيه لاتيه',               price: 18, emoji: '🥛', cat: 'espresso',tags: ['hot','milky','smooth','creamy'] },
+    { name: 'كابتشينو',                  price: 18, emoji: '☁️', cat: 'espresso',tags: ['hot','milky','foamy','balanced'] },
+    { name: 'موكا',                      price: 20, emoji: '🍫', cat: 'espresso',tags: ['hot','sweet','chocolate','indulgent'] },
+    { name: 'قهوة باردة مثلّجة',         price: 20, emoji: '🧊', cat: 'cold',    tags: ['cold','refreshing','iced','strong'] },
+    { name: 'فرابيه كراميل',              price: 22, emoji: '🧋', cat: 'cold',    tags: ['cold','sweet','caramel','indulgent','creamy'] },
+    { name: 'ماتشا لاتيه بارد',          price: 22, emoji: '💚', cat: 'cold',    tags: ['cold','healthy','floral','milky'] },
+    { name: 'شاي مغربي بالنعنع',         price: 10, emoji: '🍃', cat: 'tea',     tags: ['hot','refreshing','minty','traditional'] },
+    { name: 'تشاي هندي',                 price: 15, emoji: '🫚', cat: 'tea',     tags: ['hot','spiced','milky','warm','creamy'] },
+    { name: 'كركديه بارد',                price: 12, emoji: '🌸', cat: 'tea',     tags: ['cold','refreshing','floral','healthy'] },
+    { name: 'صوص الكراميل',               price:  3, emoji: '🍮', cat: 'extras',  tags: ['extra','sweet','caramel','topping'] },
+    { name: 'مقياس إضافي من القهوة',      price:  4, emoji: '🫙', cat: 'extras',  tags: ['extra','strong','bold','concentrate'] },
+    { name: 'حليب نباتي (لوز / شوفان)',   price:  5, emoji: '🥛', cat: 'extras',  tags: ['extra','vegan','healthy','milky'] },
+  ];
+
+  /* What each category naturally pairs with */
+  const PAIRING_BOOSTS = {
+    arabic:  ['spiced', 'traditional', 'floral', 'extra'],
+    espresso:['milky', 'sweet', 'creamy', 'extra', 'chocolate'],
+    cold:    ['cold', 'refreshing', 'sweet', 'extra'],
+    tea:     ['healthy', 'floral', 'minty', 'extra'],
+    extras:  [],
+  };
+
+  function score(product, cartNames, cartCats, cartTags, boostTags, avgPrice) {
+    let s = 0;
+    /* Exclude items already in cart */
+    if (cartNames.has(product.name)) return -1;
+
+    /* Semantic tag overlap with cart */
+    product.tags.forEach(t => {
+      if (cartTags.includes(t)) s += 1.5;
+    });
+
+    /* Pairing boost: tags recommended by cart categories */
+    product.tags.forEach(t => {
+      if (boostTags.includes(t)) s += 2.5;
+    });
+
+    /* Extras always complement drinks */
+    if (product.cat === 'extras' && cartCats.some(c => c !== 'extras')) s += 1.5;
+
+    /* Category diversity: suggest something different from the dominant category */
+    const dominant = cartCats[0];
+    if (dominant && product.cat !== dominant && product.cat !== 'extras') s += 1.5;
+
+    /* Price proximity bonus */
+    if (Math.abs(product.price - avgPrice) <= 6) s += 0.5;
+
+    return s;
+  }
+
+  /* Exposed globally so renderCart can call it */
+  window.getAIRecommendations = function (cart) {
+    if (!cart.length) return [];
+
+    const cartNames = new Set(cart.map(i => i.name));
+    const cartCats  = [...new Set(cart.map(i => i.cat).filter(Boolean))];
+    const cartTags  = cart.flatMap(i => {
+      const entry = CATALOG.find(p => p.name === i.name);
+      return entry ? entry.tags : [];
+    });
+    const boostTags = cartCats.flatMap(c => PAIRING_BOOSTS[c] || []);
+    const avgPrice  = cart.reduce((s, i) => s + i.price, 0) / cart.length;
+
+    return CATALOG
+      .map(p => ({ ...p, _score: score(p, cartNames, cartCats, cartTags, boostTags, avgPrice) }))
+      .filter(p => p._score >= 0)
+      .sort((a, b) => b._score - a._score)
+      .slice(0, 3);
+  };
+})();
+
+/* Render AI recommendation panel inside the cart drawer */
+function renderRecommendations(cart) {
+  const panel = document.getElementById('cart-recommendations');
+  if (!panel) return;
+
+  const recs = (typeof getAIRecommendations === 'function') ? getAIRecommendations(cart) : [];
+
+  if (!recs.length) {
+    panel.innerHTML = '';
+    return;
+  }
+
+  panel.innerHTML = `
+    <div class="cart-rec__header">
+      <span>✨</span>
+      <span>يُقترح لك أيضاً</span>
+      <span class="cart-rec__ai-badge">AI</span>
+    </div>
+    <div class="cart-rec__list">
+      ${recs.map(p => `
+        <div class="cart-rec__item"
+             data-name="${p.name}"
+             data-price="${p.price}"
+             data-emoji="${p.emoji}"
+             data-cat="${p.cat}">
+          <span class="cart-rec__emoji">${p.emoji}</span>
+          <div class="cart-rec__info">
+            <div class="cart-rec__name">${p.name}</div>
+            <div class="cart-rec__price">${p.price} ريال</div>
+          </div>
+          <button class="cart-rec__add" aria-label="أضف ${p.name} إلى السلة">＋</button>
+        </div>
+      `).join('')}
+    </div>`;
+
+  /* Bind add-to-cart for recommended items */
+  panel.querySelectorAll('.cart-rec__add').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.cart-rec__item');
+      /* Dispatch to the existing cart via a CustomEvent */
+      document.dispatchEvent(new CustomEvent('rec:add', {
+        detail: {
+          name:  item.dataset.name,
+          price: parseInt(item.dataset.price, 10),
+          emoji: item.dataset.emoji,
+          cat:   item.dataset.cat,
+        }
+      }));
+    });
+  });
 }
 
 /* ── Active nav link ── */
